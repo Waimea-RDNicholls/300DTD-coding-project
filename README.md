@@ -1,6 +1,6 @@
-# PROJECT NAME HERE
+# PLACEHOLDER
 
-### Level 3 Programming Project by YOUR NAME HERE
+### Level 3 Programming Project by Riley Nicholls
 
 This project is assessed against [AS91906](https://www.nzqa.govt.nz/nqfdocs/ncea-resource/achievements/2019/as91906.pdf)
 
@@ -8,10 +8,10 @@ This project is assessed against [AS91906](https://www.nzqa.govt.nz/nqfdocs/ncea
 
 The project involves the programming of a game.
 
-BRIEF PROJECT DESCRIPTION HERE
-BRIEF PROJECT DESCRIPTION HERE
-BRIEF PROJECT DESCRIPTION HERE
-BRIEF PROJECT DESCRIPTION HERE
+In this game, you must navigate the map in order to escape without
+running out of energy. You need to find the elevator to the next layer
+of the massive city you find yourself in. But it seems you'll need to find
+a few tools in order to make your way there alive...
 
 
 ## Source Code
