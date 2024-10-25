@@ -30,6 +30,8 @@ class Location(val name: String, val description: String) {
     var west: Location? = null
     var canGoPast: Boolean = true
     var unlockedBy: Item? = null
+    var lockedImageLocated: String? = null
+    var unlockedImageLocated: String? = null
 
     // Functions to add connections to other locations
     fun addLocationNorth(location: Location) {
@@ -60,6 +62,16 @@ class Location(val name: String, val description: String) {
         if (this.canGoPast) {
             this.canGoPast = false
             this.unlockedBy = item
+        }
+    }
+    fun addLockedImage(imageName: String) {
+        if (this.lockedImageLocated == null) {
+            this.lockedImageLocated = "src/images/$imageName"
+        }
+    }
+    fun addUnlockedImage(imageName: String) {
+        if (this.unlockedImageLocated == null) {
+            this.unlockedImageLocated = "src/images/$imageName"
         }
     }
 
@@ -130,8 +142,9 @@ class GUI : JFrame(), ActionListener {
 
     // Inventory Display
     private lateinit var inventoryDisplayLabel: JLabel
-
     private lateinit var unlockLocationButton: JButton
+    private var foundItemDialog = FoundItemDialog()
+
 
 
     /**
@@ -180,6 +193,7 @@ class GUI : JFrame(), ActionListener {
         door.addLocationWest(home)
         key.addItemTo(lake)
         door.unlockedBy(key)
+        door.addLockedImage("wa")
 
 
         // debug show map info
@@ -189,7 +203,6 @@ class GUI : JFrame(), ActionListener {
         lake.info()
         volcano.info()
         door.info()
-
 
     }
 
@@ -222,23 +235,21 @@ class GUI : JFrame(), ActionListener {
         // Location Displays
         // should this be centered or to the left?
         currentLocationLabel = JLabel("CURRENT LOCATION", SwingConstants.LEFT)
-        currentLocationLabel.bounds = Rectangle(259, 10, 735, 56)
+        currentLocationLabel.bounds = Rectangle(265, 0, 735, 56)
         currentLocationLabel.font = baseFont
         add(currentLocationLabel)
 
 
         locationDescriptionLabel = JLabel("CURRENT LOCATION DESCRIPTION", SwingConstants.LEFT)
         locationDescriptionLabel.setVerticalAlignment(SwingConstants.TOP)
-        locationDescriptionLabel.bounds = Rectangle(259, 66, 735, 181)
+        locationDescriptionLabel.bounds = Rectangle(265, 56, 735, 194)
         locationDescriptionLabel.font = baseFont
         add(locationDescriptionLabel)
 
-        // make width and height equal, add margin/padding
-        // need to make this image change based on location > new variable/class?
         var locationImage = ImageIcon("src/images/amogg us.png").image
-        locationImage = locationImage.getScaledInstance(253,237, Image.SCALE_SMOOTH)
+        locationImage = locationImage.getScaledInstance(250,250, Image.SCALE_SMOOTH)
         locationImageLabel = JLabel()
-        locationImageLabel.bounds = Rectangle(6, 10, 253, 237)
+        locationImageLabel.bounds = Rectangle(0, 0, 250, 250)
         locationImageLabel.icon = ImageIcon(locationImage)
         add(locationImageLabel)
 
@@ -247,7 +258,7 @@ class GUI : JFrame(), ActionListener {
         inventoryDisplayLabel = JLabel("CURRENT INVENTORY")
         inventoryDisplayLabel.setVerticalAlignment(SwingConstants.TOP)
         inventoryDisplayLabel.setHorizontalAlignment(SwingConstants.LEFT)
-        inventoryDisplayLabel.bounds = Rectangle(6, 247, 253, 490)
+        inventoryDisplayLabel.bounds = Rectangle(0, 273, 250, 477)
         inventoryDisplayLabel.font = baseFont
         add(inventoryDisplayLabel)
 
@@ -287,6 +298,7 @@ class GUI : JFrame(), ActionListener {
 
 
 
+
     }
 
     /**
@@ -302,17 +314,8 @@ class GUI : JFrame(), ActionListener {
         }
     }
 
-
     private fun showLocation() {
-        // Enable buttons if valid movement allowed
-        goNorthButton.isEnabled = (currentLocation.north != null)
-                && (currentLocation.canGoPast || currentLocation.north == previousLocation)
-        goSouthButton.isEnabled = (currentLocation.south != null)
-                && (currentLocation.canGoPast || currentLocation.south == previousLocation)
-        goEastButton.isEnabled = (currentLocation.east != null)
-                && (currentLocation.canGoPast || currentLocation.east == previousLocation)
-        goWestButton.isEnabled = (currentLocation.west != null)
-                && (currentLocation.canGoPast || currentLocation.west == previousLocation)
+        updateTravelButtons()
 
         // Show unlock location button if location is locked
         if (!currentLocation.canGoPast) {
@@ -328,9 +331,36 @@ class GUI : JFrame(), ActionListener {
             unlockLocationButton.isEnabled = false
         }
 
-        // Update display labels to show current location + description
+        // Update display labels to show new location, description, image
         currentLocationLabel.text = currentLocation.name
         locationDescriptionLabel.text = "<html>" + currentLocation.description
+        updateImageIcon()
+        updateInventory()
+
+
+    }
+    private fun updateImageIcon() {
+        var currentLocationImage =
+            if (currentLocation.canGoPast) {
+            ImageIcon("${currentLocation.unlockedImageLocated}").image
+            } else { ImageIcon("${currentLocation.lockedImageLocated}").image
+            }
+
+        currentLocationImage = currentLocationImage.getScaledInstance(253,237, Image.SCALE_SMOOTH)
+        locationImageLabel.icon = ImageIcon(currentLocationImage)
+
+    }
+
+    private fun updateTravelButtons() {
+        // Enable buttons if valid movement allowed
+        goNorthButton.isEnabled = (currentLocation.north != null)
+                && (currentLocation.canGoPast || currentLocation.north == previousLocation)
+        goSouthButton.isEnabled = (currentLocation.south != null)
+                && (currentLocation.canGoPast || currentLocation.south == previousLocation)
+        goEastButton.isEnabled = (currentLocation.east != null)
+                && (currentLocation.canGoPast || currentLocation.east == previousLocation)
+        goWestButton.isEnabled = (currentLocation.west != null)
+                && (currentLocation.canGoPast || currentLocation.west == previousLocation)
 
 
         // Update travel buttons to show locations connected to current location > you can make the text display
@@ -351,10 +381,6 @@ class GUI : JFrame(), ActionListener {
         if (currentLocation.west != null) {
             goWestButton.text = "<html><div style='text-align: center;'>West<br>" + currentLocation.west!!.name
         } else { goWestButton.text = "<html><div style='text-align: center;'>West<br>Nothing" }
-
-        updateInventory()
-
-
     }
 
     /**
@@ -405,7 +431,11 @@ class GUI : JFrame(), ActionListener {
     private fun updateInventory() {
         if (currentLocation.item != null) {
             inventory.add(currentLocation.item!!)
+            foundItemDialog.showItem(currentLocation.item!!.name)
+            foundItemDialog.isVisible = true
             currentLocation.item = null
+
+
         }
 
 
@@ -417,7 +447,7 @@ class GUI : JFrame(), ActionListener {
             inventoryDisplayLabel.text = textUpdate
         }
         else {
-            inventoryDisplayLabel.text = "You have no items."
+            inventoryDisplayLabel.text = "  You have no items."
         }
     }
 
@@ -428,17 +458,53 @@ class GUI : JFrame(), ActionListener {
                     inventory.remove(it)
                     currentLocation.unlockedBy = null
                     currentLocation.canGoPast = true
+
+
                     showLocation()
                     return
                 }
             }
-
-
         }
     }
 }
 
+//=============================================================================================
 
+
+class FoundItemDialog() : JDialog() {
+    private val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+
+    private lateinit var foundItemLabel: JLabel
+    init {
+        setupWindow()
+        buildUI()
+    }
+
+    private fun setupWindow() {
+        title = "FOUND ITEM"
+        contentPane.preferredSize = Dimension(200, 100)
+        isResizable = false
+        isModal = true
+        layout = null
+        pack()
+    }
+
+    private fun buildUI() {
+        foundItemLabel = JLabel("FOUND ITEM", SwingConstants.CENTER)
+        foundItemLabel.bounds = Rectangle(20,20,160,60)
+        foundItemLabel.font = baseFont
+        add(foundItemLabel)
+    }
+
+
+
+
+
+    fun showItem(itemName: String) {
+        title = "You found $itemName!"
+        foundItemLabel.text = "<html>You found $itemName!"
+    }
+}
 //=============================================================================================
 
 /**
