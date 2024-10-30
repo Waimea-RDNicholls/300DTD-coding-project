@@ -28,8 +28,11 @@ class Location(val name: String, val description: String) {
     var south: Location? = null
     var east: Location? = null
     var west: Location? = null
+
+    // Lock variable setup
     var canGoPast: Boolean = true
     var unlockedBy: Item? = null
+    // Image variable setup
     var lockedImageLocated: String? = null
     var unlockedImageLocated: String? = null
 
@@ -58,12 +61,14 @@ class Location(val name: String, val description: String) {
             location.addLocationEast(this)
         }
     }
+    // Function to lock location + add key
     fun unlockedBy(item: Item) {
         if (this.canGoPast) {
             this.canGoPast = false
             this.unlockedBy = item
         }
     }
+    // Function to add image to location
     fun addLockedImage(imageName: String) {
         if (this.lockedImageLocated == null) {
             this.lockedImageLocated = "src/images/$imageName"
@@ -75,9 +80,10 @@ class Location(val name: String, val description: String) {
         }
     }
 
-    // Display what this location is connected to
+    // Debug function to show location info
     fun info() {
         println("Location name: $name.")
+        // Display what this location is connected to
         if (north != null) {
             println("To the north is ${north!!.name}")
         } else { println("I have no location north.") }
@@ -90,10 +96,12 @@ class Location(val name: String, val description: String) {
         if (west != null) {
             println("To the west is ${west!!.name}")
         } else { println("I have no location west.") }
-        // Display items at location
+
+        // Display items found at location
         if (item != null) {
             println("I have ${item!!.name}")
         } else { println("I have no item.") }
+        // Display what unlocks this location
         if (!canGoPast) {
             println("You cannot go past me. I'm unlocked by ${unlockedBy!!.name}")
         } else {println("You can go past me.")}
@@ -124,6 +132,7 @@ class GUI : JFrame(), ActionListener {
     val locations = mutableListOf<Location>()
     var currentLocation: Location
     var previousLocation: Location? = null
+
 
     val inventory = mutableListOf<Item>()
 
@@ -166,9 +175,10 @@ class GUI : JFrame(), ActionListener {
     }
     private fun setupGame() {
         // Create locations
+        // Top half locations
         val manor = Location("Manor", "An imposing building, large as can be, stands in front of you." +
                 " A metal fence encircles the manor, guarding it's contents. The door itself seems to be barred with" +
-                " solid steel. You don't think you can break through with anything you'll find here.")
+                " solid steel. You don't think you can break through, unless you had some kind of drill.")
         val ladder = Location("Ladder", "A tall ladder. It goes up a fair distance, further than you can" +
                 " see... hopefully you don't have to climb for too long.")
         val ladderBase = Location("Ladder Base", "A sign reads, 'Path to the Manor.' You see a ladder next " +
@@ -183,13 +193,18 @@ class GUI : JFrame(), ActionListener {
                 "dinky batteries laying around. Like these would ever be useful.")
         val field = Location("Field", "What a nice field. Can see everything in the distance from here. " +
                 "That tower looks important.")
-        val tower = Location("Tower", "Hey look, the tower! This must be the way free!")
-        val elevator = Location("Elevator", "Now, to just go up this thing...")
+        val tower = Location("Tower", "Hey look, the tower! This must be the way free! The door requires a " +
+                "keycard to activate.")
+        val elevator = Location("Elevator", "Now, to just go up this thing...why does it have no power? " +
+                "Why does this thing accept AA batteries? This can't be up to health and safety standards...")
+        val win = Location("Freedom!!!", "Hey, why hasn't the artstyle changed?!")
+        val manorRoom = Location("Grand Manor Room", "This manor seems awfully small compared to the outside. " +
+                "Why is there only one room? There's some fancy paintings at least. And a keycard? This might be useful.")
 
 
 
 
-
+        // Bottom half locations
         val battlefield = Location("Battlefield", "This place is dangerous. Craters scar the area like pockmarks. " +
                 "But, with all this rubble, there's bound to be something good to find...")
         val plane = Location("Plane Wreck", "Amongst the snowy land, a massive skeleton of a plane lies " +
@@ -201,12 +216,17 @@ class GUI : JFrame(), ActionListener {
                 "horrible low quality art go?")
         val sewer = Location("Sewer", "Why would you even want to go here? This place STINKS!")
         val apartments = Location("Apartments", "The people living here were seriously handy... they " +
-                "even had a map, for some reason. Maybe they just got lost all the time.")
+                "even had a map, for some reason. Arrows seem to mark the map, with an image of a ruined plane " +
+                "acting as a starting point. The arrows are as follows: ")
         val darkTunnel = Location("Dark Tunnel", "Where are the lights!?")
-        val bunker = Location("Bunker", "What a nice place. Fancy there being a ladder here.")
+        val bunker = Location("Bunker", "What a nice place. Fancy there being a ladder here. This place " +
+                "is stocked to the brim with all sorts of goods, as well. But upon closer inspection, all of these cans " +
+                "of beans have gone off...")
         val crater = Location("Crater", "What a large crater. Wonder what caused this.")
 
-        val key = Item("Golden Key")
+        val batteries = Item("Batteries")
+        val keyCard = Item("Key Card")
+        val drill = Item("Drill")
 
         // Add locations to mutable list
         // Starting location
@@ -223,6 +243,8 @@ class GUI : JFrame(), ActionListener {
         locations.add(field)
         locations.add(tower)
         locations.add(elevator)
+        locations.add(win)
+        locations.add(manorRoom)
 
         // Bottom half locations
         locations.add(battlefield)
@@ -246,6 +268,8 @@ class GUI : JFrame(), ActionListener {
         tower.addLocationEast(field)
         elevator.addLocationNorth(tower)
         ridges.addLocationNorth(ladderBase)
+        win.addLocationNorth(elevator)
+        manorRoom.addLocationSouth(manor)
 
         // Bottom half locations
         battlefield.addLocationNorth(ridges)
@@ -261,7 +285,27 @@ class GUI : JFrame(), ActionListener {
         darkTunnel.addLocationWest(home)
 
 
-        // debug show map info
+
+        // Lock locations, add keys to locations
+        batteries.addItemTo(controlRoom)
+        elevator.unlockedBy(batteries)
+
+        keyCard.addItemTo(manorRoom)
+        tower.unlockedBy(keyCard)
+
+        drill.addItemTo(bunker)
+        manor.unlockedBy(drill)
+
+        // Add images to locations
+        home.addUnlockedImage("home")
+        manor.addUnlockedImage("manorUnlocked")
+        manor.addLockedImage("manorLocked")
+        manorRoom.addUnlockedImage("manorRoom")
+        aquarium.addUnlockedImage("aquarium")
+        plane.addUnlockedImage("plane")
+        elevator.addLockedImage("elevatorLocked")
+        elevator.addUnlockedImage("elevatorUnlocked")
+
 
 
     }
@@ -285,15 +329,8 @@ class GUI : JFrame(), ActionListener {
     private fun buildUI() {
         val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 20)
 
-//        exampleLabel = JLabel("Hello, World!", SwingConstants.CENTER)
-//        exampleLabel.bounds = Rectangle(30, 30, 240, 40)
-//        exampleLabel.font = baseFont
-//        add(exampleLabel)
 
-        // consider updating the labels to textareas > https://stackoverflow.com/questions/40811364/how-to-wrap-text-in-a-jlabel
-
-        // Location Displays
-        // should this be centered or to the left?
+        //---LOCATION DISPLAY LABELS -----------------------------------------------------------------------------------
         currentLocationLabel = JLabel("CURRENT LOCATION", SwingConstants.LEFT)
         currentLocationLabel.bounds = Rectangle(265, 0, 735, 56)
         currentLocationLabel.font = baseFont
@@ -313,8 +350,7 @@ class GUI : JFrame(), ActionListener {
         locationImageLabel.icon = ImageIcon(locationImage)
         add(locationImageLabel)
 
-        // Inventory display > consider adding a popup "you found [x]!"
-        // this ones a piece of garbage and hates swingconstants in the label itself
+        //---INVENTORY DISPLAY LABEL -----------------------------------------------------------------------------------
         inventoryDisplayLabel = JLabel("CURRENT INVENTORY")
         inventoryDisplayLabel.setVerticalAlignment(SwingConstants.TOP)
         inventoryDisplayLabel.setHorizontalAlignment(SwingConstants.LEFT)
@@ -325,7 +361,7 @@ class GUI : JFrame(), ActionListener {
 
 
 
-        //---NAVIGATION BUTTONS CENTER DIS SHIT BRUH ---------------------------------------------------------------------------------------
+        //---NAVIGATION BUTTONS ----------------------------------------------------------------------------------------
         goNorthButton = JButton("CURRENT LOCATION NORTH")
         goNorthButton.bounds = Rectangle(535,297,183,115)
         goNorthButton.font = baseFont
@@ -381,12 +417,14 @@ class GUI : JFrame(), ActionListener {
         if (!currentLocation.canGoPast) {
             unlockLocationButton.isVisible = true
             unlockLocationButton.text = "<html>Use ${currentLocation.unlockedBy!!.name}"
-            if (inventory.any{it == currentLocation.unlockedBy}) { // Allow use of unlock button if player has required item
+
+            // Allow use of unlock button if player has required item
+            if (inventory.any{it == currentLocation.unlockedBy}) {
                 unlockLocationButton.isEnabled = true
             }
         }
         else {
-            // Hide unlock location button > should it be shown, disabled and say "no item to use"?
+            // Hide unlock location button
             unlockLocationButton.isVisible = false
             unlockLocationButton.isEnabled = false
         }
@@ -402,17 +440,22 @@ class GUI : JFrame(), ActionListener {
     private fun updateImageIcon() {
         var currentLocationImage =
             if (currentLocation.canGoPast) {
+                // Show unlocked location image
             ImageIcon("${currentLocation.unlockedImageLocated}").image
-            } else { ImageIcon("${currentLocation.lockedImageLocated}").image
+            }
+            else {
+                // Show locked location image
+                ImageIcon("${currentLocation.lockedImageLocated}").image
             }
 
-        currentLocationImage = currentLocationImage.getScaledInstance(253,237, Image.SCALE_SMOOTH)
+        // Resize image and add to label
+        currentLocationImage = currentLocationImage.getScaledInstance(250,250, Image.SCALE_SMOOTH)
         locationImageLabel.icon = ImageIcon(currentLocationImage)
 
     }
 
     private fun updateTravelButtons() {
-        // Enable buttons if valid movement allowed
+        // Enable movement buttons if player has valid movement options
         goNorthButton.isEnabled = (currentLocation.north != null)
                 && (currentLocation.canGoPast || currentLocation.north == previousLocation)
         goSouthButton.isEnabled = (currentLocation.south != null)
@@ -423,9 +466,7 @@ class GUI : JFrame(), ActionListener {
                 && (currentLocation.canGoPast || currentLocation.west == previousLocation)
 
 
-        // Update travel buttons to show locations connected to current location > you can make the text display
-        // more efficient if you produce <html><div style='text-align: center;'>[direction] and then add a conditional
-        // "if X != null" then + currentlocation.[direction]!!.name else + "nothing" > cleaner code!
+        // Update travel buttons to show locations connected to current location
         if (currentLocation.north != null) {
             goNorthButton.text = "<html><div style='text-align: center;'>North<br>" + currentLocation.north!!.name
         } else { goNorthButton.text = "<html><div style='text-align: center;'>North<br>Nothing</html>" }
@@ -489,11 +530,12 @@ class GUI : JFrame(), ActionListener {
      */
 
     private fun updateInventory() {
+        // Check if location has item
         if (currentLocation.item != null) {
-            inventory.add(currentLocation.item!!)
-            foundItemDialog.showItem(currentLocation.item!!.name)
+            inventory.add(currentLocation.item!!)                       // Add item to inventory
+            foundItemDialog.showItem(currentLocation.item!!.name)       // Display found item dialog
             foundItemDialog.isVisible = true
-            currentLocation.item = null
+            currentLocation.item = null                                 // Remove item from location
 
 
         }
@@ -501,9 +543,11 @@ class GUI : JFrame(), ActionListener {
 
         var textUpdate = "<html>"
         inventory.forEach() {
+            // Check if we need to update inventory display text
             textUpdate += "<li>${it.name}</li><br>"
         }
         if (textUpdate != "<html>") {
+            // Update inventory display text
             inventoryDisplayLabel.text = textUpdate
         }
         else {
@@ -512,9 +556,12 @@ class GUI : JFrame(), ActionListener {
     }
 
     private fun unlockLocation() {
+        // If this location is locked...
         while (!currentLocation.canGoPast) {
             inventory.forEach() {
+                // Check player inventory for right item
                 if (it == currentLocation.unlockedBy) {
+                    // Unlock location
                     inventory.remove(it)
                     currentLocation.unlockedBy = null
                     currentLocation.canGoPast = true
@@ -524,6 +571,13 @@ class GUI : JFrame(), ActionListener {
                     return
                 }
             }
+        }
+    }
+
+    private fun checkForWin() {
+        // Win if player at the exit
+        if (currentLocation.name == "Freedom!!!") {
+//            winDialog
         }
     }
 }
