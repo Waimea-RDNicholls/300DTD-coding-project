@@ -166,43 +166,103 @@ class GUI : JFrame(), ActionListener {
     }
     private fun setupGame() {
         // Create locations
-        val mountains = Location("Mountains", "It's really chilly here!")
-        val plains = Location("Plains", "You can see so much of nothing.")
-        val forest = Location("Forest", "Too much wood here!")
-        val lake = Location("Lake", "What's that blue stuff?")
-        val volcano = Location("Volcano", "Looks scary.")
-        val door = Location("Door", "A foreboding door blocks the way.")
-        val home = Location("Home", "It's where you live.")
+        val manor = Location("Manor", "An imposing building, large as can be, stands in front of you." +
+                " A metal fence encircles the manor, guarding it's contents. The door itself seems to be barred with" +
+                " solid steel. You don't think you can break through with anything you'll find here.")
+        val ladder = Location("Ladder", "A tall ladder. It goes up a fair distance, further than you can" +
+                " see... hopefully you don't have to climb for too long.")
+        val ladderBase = Location("Ladder Base", "A sign reads, 'Path to the Manor.' You see a ladder next " +
+                "to the sign, one that seems to stretch on further than you can believe. To go up, or not?")
+        val ridges = Location("Ridges", "Narrow ridges jut out, just wide enough for you to navigate. " +
+                "It seems to lead further up, towards a platform.")
+        val pipes = Location("Pipes", "Large pipes stand high above the ground. They seem stable enough to " +
+                "walk across.")
+        val aquarium = Location("Aquarium", "This place has so much water! No wonder there were pipes on the " +
+                "way here. But this also looks surprisingly high-tech... there must be a control room directly nearby!")
+        val controlRoom = Location("Control Room", "This place isn't high tech at all! There's just some " +
+                "dinky batteries laying around. Like these would ever be useful.")
+        val field = Location("Field", "What a nice field. Can see everything in the distance from here. " +
+                "That tower looks important.")
+        val tower = Location("Tower", "Hey look, the tower! This must be the way free!")
+        val elevator = Location("Elevator", "Now, to just go up this thing...")
+
+
+
+
+
+        val battlefield = Location("Battlefield", "This place is dangerous. Craters scar the area like pockmarks. " +
+                "But, with all this rubble, there's bound to be something good to find...")
+        val plane = Location("Plane Wreck", "Amongst the snowy land, a massive skeleton of a plane lies " +
+                "in wait, almost as if it seeks to ensnare passersby. It's just a plane, though. Can't do much.")
+        val home = Location("Home..?", "This is home. But why is everything in such low quality? What the " +
+                "hell happened here? What's that tower, far to the north? Maybe I can find directions somewhere to the " +
+                "south-east...")
+        val emptyField = Location("Empty Field", "There is literally nothing here. What? Where did that " +
+                "horrible low quality art go?")
+        val sewer = Location("Sewer", "Why would you even want to go here? This place STINKS!")
+        val apartments = Location("Apartments", "The people living here were seriously handy... they " +
+                "even had a map, for some reason. Maybe they just got lost all the time.")
+        val darkTunnel = Location("Dark Tunnel", "Where are the lights!?")
+        val bunker = Location("Bunker", "What a nice place. Fancy there being a ladder here.")
+        val crater = Location("Crater", "What a large crater. Wonder what caused this.")
 
         val key = Item("Golden Key")
 
         // Add locations to mutable list
-        locations.add(plains)
-        locations.add(mountains)
-        locations.add(forest)
-        locations.add(lake)
-        locations.add(volcano)
-        locations.add(door)
+        // Starting location
+        locations.add(home)
+
+        // Top half locations
+        locations.add(manor)
+        locations.add(ladder)
+        locations.add(ladderBase)
+        locations.add(ridges)
+        locations.add(pipes)
+        locations.add(aquarium)
+        locations.add(controlRoom)
+        locations.add(field)
+        locations.add(tower)
+        locations.add(elevator)
+
+        // Bottom half locations
+        locations.add(battlefield)
+        locations.add(plane)
+        locations.add(emptyField)
+        locations.add(sewer)
+        locations.add(apartments)
+        locations.add(darkTunnel)
+        locations.add(bunker)
+        locations.add(crater)
+
 
         // Create map by connecting locations to each other
-        plains.addLocationNorth(mountains)
-        plains.addLocationSouth(volcano)
-        plains.addLocationWest(forest)
-        plains.addLocationEast(lake)
-        mountains.addLocationNorth(door)
-        door.addLocationWest(home)
-        key.addItemTo(lake)
-        door.unlockedBy(key)
-        door.addLockedImage("wa")
+        // Top half locations
+        ladder.addLocationNorth(manor)
+        ladderBase.addLocationNorth(ladder)
+        pipes.addLocationEast(ladderBase)
+        aquarium.addLocationEast(pipes)
+        controlRoom.addLocationNorth(aquarium)
+        field.addLocationEast(aquarium)
+        tower.addLocationEast(field)
+        elevator.addLocationNorth(tower)
+        ridges.addLocationNorth(ladderBase)
+
+        // Bottom half locations
+        battlefield.addLocationNorth(ridges)
+        plane.addLocationEast(battlefield)
+        home.addLocationNorth(plane)
+        sewer.addLocationEast(plane)
+        emptyField.addLocationNorth(sewer)
+        emptyField.addLocationEast(home)
+        apartments.addLocationNorth(emptyField)
+        crater.addLocationWest(battlefield)
+        crater.addLocationEast(bunker)
+        bunker.addLocationSouth(darkTunnel)
+        darkTunnel.addLocationWest(home)
 
 
         // debug show map info
-        mountains.info()
-        plains.info()
-        forest.info()
-        lake.info()
-        volcano.info()
-        door.info()
+
 
     }
 
@@ -478,6 +538,7 @@ class FoundItemDialog() : JDialog() {
     init {
         setupWindow()
         buildUI()
+        setLocationRelativeTo(null)
     }
 
     private fun setupWindow() {
