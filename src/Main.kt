@@ -71,12 +71,12 @@ class Location(val name: String, val description: String) {
     // Function to add image to location
     fun addLockedImage(imageName: String) {
         if (this.lockedImageLocated == null) {
-            this.lockedImageLocated = "src/images/$imageName"
+            this.lockedImageLocated = "src/images/$imageName.jpg"
         }
     }
     fun addUnlockedImage(imageName: String) {
         if (this.unlockedImageLocated == null) {
-            this.unlockedImageLocated = "src/images/$imageName"
+            this.unlockedImageLocated = "src/images/$imageName.jpg"
         }
     }
 
@@ -183,8 +183,8 @@ class GUI : JFrame(), ActionListener {
                 " see... hopefully you don't have to climb for too long.")
         val ladderBase = Location("Ladder Base", "A sign reads, 'Path to the Manor.' You see a ladder next " +
                 "to the sign, one that seems to stretch on further than you can believe. To go up, or not?")
-        val ridges = Location("Ridges", "Narrow ridges jut out, just wide enough for you to navigate. " +
-                "It seems to lead further up, towards a platform.")
+        val ridges = Location("Ridges", "Narrow ridges jut out, just wide enough for you to navigate, above " +
+                "the battlefield. It seems to lead further up, towards a platform.")
         val pipes = Location("Pipes", "Large pipes stand high above the ground. They seem stable enough to " +
                 "walk across.")
         val aquarium = Location("Aquarium", "This place has so much water! No wonder there were pipes on the " +
@@ -205,8 +205,8 @@ class GUI : JFrame(), ActionListener {
 
 
         // Bottom half locations
-        val battlefield = Location("Battlefield", "This place is dangerous. Craters scar the area like pockmarks. " +
-                "But, with all this rubble, there's bound to be something good to find...")
+        val battlefield = Location("Battlefield", "Oh, the humanity! We can't show this to anyone! We'll get " +
+                "an age rating of 18+! Avert your eyes! At least there seems to be something useful amongst all this viscera...")
         val plane = Location("Plane Wreck", "Amongst the snowy land, a massive skeleton of a plane lies " +
                 "in wait, almost as if it seeks to ensnare passersby. It's just a plane, though. Can't do much.")
         val home = Location("Home..?", "This is home. But why is everything in such low quality? What the " +
@@ -305,6 +305,25 @@ class GUI : JFrame(), ActionListener {
         plane.addUnlockedImage("plane")
         elevator.addLockedImage("elevatorLocked")
         elevator.addUnlockedImage("elevatorUnlocked")
+        field.addUnlockedImage("field")
+        pipes.addUnlockedImage("pipes")
+        ladderBase.addUnlockedImage("ladderBase")
+        ladder.addUnlockedImage("ladder")
+        battlefield.addUnlockedImage("battlefield")
+        sewer.addUnlockedImage("sewer")
+        bunker.addUnlockedImage("bunker")
+        darkTunnel.addUnlockedImage("darkTunnel")
+        apartments.addUnlockedImage("apartments")
+        crater.addUnlockedImage("crater")
+        ridges.addUnlockedImage("ridges")
+        tower.addLockedImage("towerLocked")
+        tower.addUnlockedImage("towerUnlocked")
+        win.addUnlockedImage("win")
+
+
+
+
+
 
 
 
@@ -577,7 +596,8 @@ class GUI : JFrame(), ActionListener {
     private fun checkForWin() {
         // Win if player at the exit
         if (currentLocation.name == "Freedom!!!") {
-//            winDialog
+//            winDialog()
+
         }
     }
 }

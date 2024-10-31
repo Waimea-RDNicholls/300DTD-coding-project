@@ -93,7 +93,7 @@ EXPECTED OUTCOME DETAILED HERE
 
 ACTUAL RESULTS OF TESTING SHOWN HERE
 
-![](images/placeholder.jpg)
+![](src/images/placeholder.jpg)
 
 NOTES REGARDING THE RESULTS HERE
 
@@ -102,7 +102,7 @@ NOTES REGARDING THE RESULTS HERE
 
 ACTUAL RESULTS OF TESTING SHOWN HERE
 
-![](images/placeholder.jpg)
+![](src/images/placeholder.jpg)
 
 NOTES REGARDING THE RESULTS HERE
 
@@ -111,7 +111,7 @@ NOTES REGARDING THE RESULTS HERE
 
 ACTUAL RESULTS OF TESTING SHOWN HERE
 
-![](images/placeholder.jpg)
+![](src/images/placeholder.jpg)
 
 NOTES REGARDING THE RESULTS HERE
 
@@ -120,7 +120,7 @@ NOTES REGARDING THE RESULTS HERE
 
 ACTUAL RESULTS OF TESTING SHOWN HERE
 
-![](images/placeholder.jpg)
+![](src/images/placeholder.jpg)
 
 NOTES REGARDING THE RESULTS HERE
 
