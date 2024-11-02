@@ -154,6 +154,8 @@ class GUI : JFrame(), ActionListener {
     private lateinit var unlockLocationButton: JButton
     private var foundItemDialog = FoundItemDialog()
 
+    private var winDialog = WinDialog()
+
 
 
     /**
@@ -453,6 +455,7 @@ class GUI : JFrame(), ActionListener {
         locationDescriptionLabel.text = "<html>" + currentLocation.description
         updateImageIcon()
         updateInventory()
+        checkForWin()
 
 
     }
@@ -596,7 +599,8 @@ class GUI : JFrame(), ActionListener {
     private fun checkForWin() {
         // Win if player at the exit
         if (currentLocation.name == "Freedom!!!") {
-//            winDialog()
+            winDialog
+            winDialog.isVisible = true
 
         }
     }
@@ -638,6 +642,35 @@ class FoundItemDialog() : JDialog() {
     fun showItem(itemName: String) {
         title = "You found $itemName!"
         foundItemLabel.text = "<html>You found $itemName!"
+    }
+}
+
+
+class WinDialog() : JDialog() {
+    private val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 20)
+
+    private lateinit var winDialogLabel: JLabel
+    init {
+        setupWindow()
+        buildUI()
+        setLocationRelativeTo(null)
+    }
+
+    private fun setupWindow() {
+        title = "You win!"
+        contentPane.preferredSize = Dimension(200, 100)
+        isResizable = false
+        isModal = true
+        layout = null
+        pack()
+    }
+
+    private fun buildUI() {
+        winDialogLabel = JLabel("FOUND ITEM", SwingConstants.CENTER)
+        winDialogLabel.bounds = Rectangle(20,20,160,60)
+        winDialogLabel.font = baseFont
+        winDialogLabel.text = "<html>You found the exit! You win!"
+        add(winDialogLabel)
     }
 }
 //=============================================================================================
