@@ -647,7 +647,12 @@ class GUI : JFrame(), ActionListener {
     }
 
     private fun replay() {
-        // Restart the game
+        locations.removeAll(locations)
+        setupGame()
+        currentLocation = locations.first()
+        replayButton.isVisible = false
+        showLocation()
+
     }
 }
 
