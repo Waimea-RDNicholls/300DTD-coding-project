@@ -364,7 +364,7 @@ class GUI : JFrame(), ActionListener {
         locationDescriptionLabel.font = baseFont
         add(locationDescriptionLabel)
 
-        var locationImage = ImageIcon("src/images/amogg us.png").image
+        var locationImage = ImageIcon("src/images/").image
         locationImage = locationImage.getScaledInstance(250,250, Image.SCALE_SMOOTH)
         locationImageLabel = JLabel()
         locationImageLabel.bounds = Rectangle(0, 0, 250, 250)
@@ -554,10 +554,13 @@ class GUI : JFrame(), ActionListener {
     private fun updateInventory() {
         // Check if location has item
         if (currentLocation.item != null) {
-            inventory.add(currentLocation.item!!)                       // Add item to inventory
-            foundItemDialog.showItem(currentLocation.item!!.name)       // Display found item dialog
+            // Add item to inventory
+            inventory.add(currentLocation.item!!)
+            // Display found item dialog
+            foundItemDialog.showItem(currentLocation.item!!.name)
             foundItemDialog.isVisible = true
-            currentLocation.item = null                                 // Remove item from location
+            // Remove item from location
+            currentLocation.item = null
 
 
         }
@@ -606,7 +609,7 @@ class GUI : JFrame(), ActionListener {
     }
 }
 
-//=============================================================================================
+//=Dialogs==============================================================================================================
 
 
 class FoundItemDialog() : JDialog() {
@@ -645,11 +648,13 @@ class FoundItemDialog() : JDialog() {
     }
 }
 
+//--Win Dialog----------------------------------------------------------------------------------------------------------
 
 class WinDialog() : JDialog() {
     private val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 20)
 
     private lateinit var winDialogLabel: JLabel
+    private lateinit var playAgainButton: JButton
     init {
         setupWindow()
         buildUI()
@@ -658,7 +663,7 @@ class WinDialog() : JDialog() {
 
     private fun setupWindow() {
         title = "You win!"
-        contentPane.preferredSize = Dimension(200, 100)
+        contentPane.preferredSize = Dimension(300, 300)
         isResizable = false
         isModal = true
         layout = null
@@ -666,14 +671,20 @@ class WinDialog() : JDialog() {
     }
 
     private fun buildUI() {
-        winDialogLabel = JLabel("FOUND ITEM", SwingConstants.CENTER)
+        winDialogLabel = JLabel("YOU WIN", SwingConstants.CENTER)
         winDialogLabel.bounds = Rectangle(20,20,160,60)
         winDialogLabel.font = baseFont
         winDialogLabel.text = "<html>You found the exit! You win!"
         add(winDialogLabel)
+
+        playAgainButton = JButton("Play Again?")
+        playAgainButton.bounds = Rectangle(555, 445, 143, 95)
+        playAgainButton.font = baseFont
+        playAgainButton.addActionListener(this)
+        add(playAgainButton)
     }
 }
-//=============================================================================================
+//======================================================================================================================
 
 /**
  * Launch the application
