@@ -61,6 +61,7 @@ class Location(val name: String, val description: String) {
             location.addLocationEast(this)
         }
     }
+
     // Function to lock location + add key
     fun unlockedBy(item: Item) {
         if (this.canGoPast) {
@@ -68,7 +69,8 @@ class Location(val name: String, val description: String) {
             this.unlockedBy = item
         }
     }
-    // Function to add image to location
+
+    // Functions to add image to location
     fun addLockedImage(imageName: String) {
         if (this.lockedImageLocated == null) {
             this.lockedImageLocated = "src/images/$imageName.jpg"
@@ -80,7 +82,7 @@ class Location(val name: String, val description: String) {
         }
     }
 
-    // Debug function to show location info
+    // Debug function to show details about location
     fun info() {
         println("Location name: $name.")
         // Display what this location is connected to
@@ -110,8 +112,10 @@ class Location(val name: String, val description: String) {
 
 }
 class Item(val name: String) {
+    // Where item is found
     var located: Location? = null
 
+    // Function to add item to a location
     fun addItemTo(location: Location) {
         if (location != null) {
             location.item = this
@@ -130,10 +134,11 @@ class Item(val name: String) {
 class GUI : JFrame(), ActionListener {
     // Create list of map locations
     val locations = mutableListOf<Location>()
+
     var currentLocation: Location
     var previousLocation: Location? = null
 
-
+    // Set up player inventory
     val inventory = mutableListOf<Item>()
 
     // Setup some properties to hold the UI elements
@@ -179,7 +184,7 @@ class GUI : JFrame(), ActionListener {
     }
     private fun setupGame() {
         // Create locations
-        // Top half locations
+        // 'Top half' locations
         val manor = Location("Manor", "An imposing building, large as can be, stands in front of you." +
                 " A metal fence encircles the manor, guarding it's contents. The door itself seems to be barred with" +
                 " solid steel. You don't think you can break through, unless you had some kind of drill.")
@@ -208,7 +213,7 @@ class GUI : JFrame(), ActionListener {
 
 
 
-        // Bottom half locations
+        // 'Bottom half' locations
         val battlefield = Location("Battlefield", "Oh, the humanity! We can't show this to anyone! We'll get " +
                 "an age rating of 18+! Avert your eyes! At least there seems to be something useful amongst all this viscera...")
         val plane = Location("Plane Wreck", "Amongst the snowy land, a massive skeleton of a plane lies " +
@@ -228,6 +233,7 @@ class GUI : JFrame(), ActionListener {
                 "of beans have gone off...")
         val crater = Location("Crater", "What a large crater. Wonder what caused this.")
 
+        // Create items
         val batteries = Item("Batteries")
         val keyCard = Item("Key Card")
         val drill = Item("Drill")
@@ -290,7 +296,7 @@ class GUI : JFrame(), ActionListener {
 
 
 
-        // Lock locations, add keys to locations
+        // Lock locations, distribute items to locations
         batteries.addItemTo(controlRoom)
         elevator.unlockedBy(batteries)
 
@@ -300,7 +306,7 @@ class GUI : JFrame(), ActionListener {
         drill.addItemTo(bunker)
         manor.unlockedBy(drill)
 
-        // Add images to locations
+        // Add display images to locations
         home.addUnlockedImage("home")
         manor.addUnlockedImage("manorUnlocked")
         manor.addLockedImage("manorLocked")
@@ -445,7 +451,8 @@ class GUI : JFrame(), ActionListener {
     }
 
     private fun showLocation() {
-        updateTravelButtons()
+        // Check if movement options are valid, update text within movement buttons
+        updateMovementButtons()
 
         // Show unlock location button if location is locked
         if (!currentLocation.canGoPast) {
@@ -489,7 +496,7 @@ class GUI : JFrame(), ActionListener {
 
     }
 
-    private fun updateTravelButtons() {
+    private fun updateMovementButtons() {
         // Enable movement buttons if player has valid movement options
         goNorthButton.isEnabled = (currentLocation.north != null)
                 && (currentLocation.canGoPast || currentLocation.north == previousLocation)
@@ -501,7 +508,7 @@ class GUI : JFrame(), ActionListener {
                 && (currentLocation.canGoPast || currentLocation.west == previousLocation)
 
 
-        // Update travel buttons to show locations connected to current location
+        // Update travel buttons to display name of locations connected to current location
         if (currentLocation.north != null) {
             goNorthButton.text = "<html><div style='text-align: center;'>North<br>" + currentLocation.north!!.name
         } else { goNorthButton.text = "<html><div style='text-align: center;'>North<br>Nothing</html>" }
@@ -629,9 +636,10 @@ class GUI : JFrame(), ActionListener {
         if (currentLocation.name == "Freedom!!!") {
             winDialog
             winDialog.isVisible = true
+            // Enable replay button
             replayButton.isVisible = true
             replayButton.isEnabled = true
-
+            // Disable movement
             goNorthButton.isEnabled = false
 
 
@@ -639,7 +647,7 @@ class GUI : JFrame(), ActionListener {
     }
 
     private fun replay() {
-
+        // Restart the game
     }
 }
 
@@ -677,6 +685,7 @@ class FoundItemDialog() : JDialog() {
 
 
     fun showItem(itemName: String) {
+        // Show what item player has found
         title = "You found $itemName!"
         foundItemLabel.text = "<html>You found $itemName!"
     }
@@ -705,6 +714,7 @@ class WinDialog() : JDialog() {
 
 
     private fun buildUI() {
+        // Tell player they've won
         winDialogLabel = JLabel("YOU WIN", SwingConstants.CENTER)
         winDialogLabel.bounds = Rectangle(20,20,160,60)
         winDialogLabel.font = baseFont

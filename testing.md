@@ -62,7 +62,7 @@ Valid moves:
 Try to move to a valid location e.g an unlocked space to the north, south, east and west.
 
 Edge-case valid moves:
-Try to move to and from an edge-case location, e.g the first location in the list (home)
+Try to move to and from an edge-case location, e.g the first location in the list (home), or the last location in the list (crater)
 
 Invalid moves:
 Try to move to a 'null' location.
