@@ -154,7 +154,9 @@ class GUI : JFrame(), ActionListener {
     private lateinit var unlockLocationButton: JButton
     private var foundItemDialog = FoundItemDialog()
 
+    // Win Dialog + Replay Button
     private var winDialog = WinDialog()
+    private lateinit var replayButton: JButton
 
 
 
@@ -321,6 +323,7 @@ class GUI : JFrame(), ActionListener {
         tower.addLockedImage("towerLocked")
         tower.addUnlockedImage("towerUnlocked")
         win.addUnlockedImage("win")
+        controlRoom.addUnlockedImage("controlRoom")
 
 
 
@@ -413,6 +416,15 @@ class GUI : JFrame(), ActionListener {
         unlockLocationButton.addActionListener(this)
         add(unlockLocationButton)
 
+        //---REPLAY BUTTON ---------------------------------------------------------------------------------------------
+        replayButton = JButton("Play Again!")
+        replayButton.bounds = Rectangle(555, 445, 143, 95)
+        replayButton.font = baseFont
+        replayButton.addActionListener(this)
+        replayButton.isVisible = false
+        add(replayButton)
+
+
 
 
 
@@ -428,6 +440,7 @@ class GUI : JFrame(), ActionListener {
             goEastButton -> goEast()
             goWestButton -> goWest()
             unlockLocationButton -> unlockLocation()
+            replayButton -> replay()
         }
     }
 
@@ -506,10 +519,13 @@ class GUI : JFrame(), ActionListener {
         } else { goWestButton.text = "<html><div style='text-align: center;'>West<br>Nothing" }
     }
 
+
     /**
      *  Movement Functions
      * Perform error check, if valid change location in {direction} to current location
      */
+
+
     private fun goNorth() {
         // Error check => update north to current location
         if (currentLocation.north != null) {
@@ -546,10 +562,12 @@ class GUI : JFrame(), ActionListener {
         }
     }
 
+
     /**
      * Inventory Functions
      * Display and update player inventory
      */
+
 
     private fun updateInventory() {
         // Check if location has item
@@ -599,17 +617,33 @@ class GUI : JFrame(), ActionListener {
         }
     }
 
+
+    /**
+     * Win Functions
+     * Display victory dialogue, allow replay
+     */
+
+
     private fun checkForWin() {
         // Win if player at the exit
         if (currentLocation.name == "Freedom!!!") {
             winDialog
             winDialog.isVisible = true
+            replayButton.isVisible = true
+            replayButton.isEnabled = true
+
+            goNorthButton.isEnabled = false
+
 
         }
     }
+
+    private fun replay() {
+
+    }
 }
 
-//=Dialogs==============================================================================================================
+//==Dialogs=============================================================================================================
 
 
 class FoundItemDialog() : JDialog() {
@@ -654,7 +688,6 @@ class WinDialog() : JDialog() {
     private val baseFont = Font(Font.SANS_SERIF, Font.PLAIN, 20)
 
     private lateinit var winDialogLabel: JLabel
-    private lateinit var playAgainButton: JButton
     init {
         setupWindow()
         buildUI()
@@ -670,6 +703,7 @@ class WinDialog() : JDialog() {
         pack()
     }
 
+
     private fun buildUI() {
         winDialogLabel = JLabel("YOU WIN", SwingConstants.CENTER)
         winDialogLabel.bounds = Rectangle(20,20,160,60)
@@ -677,12 +711,8 @@ class WinDialog() : JDialog() {
         winDialogLabel.text = "<html>You found the exit! You win!"
         add(winDialogLabel)
 
-        playAgainButton = JButton("Play Again?")
-        playAgainButton.bounds = Rectangle(555, 445, 143, 95)
-        playAgainButton.font = baseFont
-        playAgainButton.addActionListener(this)
-        add(playAgainButton)
     }
+
 }
 //======================================================================================================================
 
