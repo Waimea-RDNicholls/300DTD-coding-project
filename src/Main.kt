@@ -1,6 +1,6 @@
 /**
  * ------------------------------------------------------------------------
- * Microsoft Paint
+ * Microsoft Paint Escape
  * Level 3 programming project
  *
  * by Riley ########
