@@ -150,36 +150,37 @@ When replaying, the map should remain the same, and they should be able to win a
 
 ### Map Generation
 
-ACTUAL RESULTS OF TESTING SHOWN HERE
+This video displays the map being generated multiple times.
 
-![](src/images/placeholder.jpg)
+https://youtu.be/lVZfV1a2Dro
 
-NOTES REGARDING THE RESULTS HERE
+The map was the same every time, with items located in the same spots, with the same locked/unlocked location images.
 
 
 ### Movement
 
-ACTUAL RESULTS OF TESTING SHOWN HERE
+This video displays all movement buttons being pressed.
 
-![](src/images/placeholder.jpg)
+https://youtu.be/dXztuN42XAI
 
-NOTES REGARDING THE RESULTS HERE
+The edge-cases, the first and last locations, both worked fine. The player could not input invalid moves,
+so invalid cases could not occur in the first place.
 
 
-### Inventory
+### Items + Inventory
 
-ACTUAL RESULTS OF TESTING SHOWN HERE
+This video displays all items being gathered and used.
 
-![](src/images/placeholder.jpg)
+https://youtu.be/BA24HPaBUWI?si=521_Tm7KlYU_rnBE
 
-NOTES REGARDING THE RESULTS HERE
+Note the edge-cases, of having none of the items or the maximum amount possible, both worked fine.
+Additionally, invalid cases were unable to even occur.
 
 
 ### Winning
 
-ACTUAL RESULTS OF TESTING SHOWN HERE
+This video shows the win feature being used multiple times in a row.
 
-![](src/images/placeholder.jpg)
+https://youtu.be/Q6fekZsKcEI
 
-NOTES REGARDING THE RESULTS HERE
-
+The win button works every time in a row.
