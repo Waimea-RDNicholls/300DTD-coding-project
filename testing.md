@@ -125,6 +125,7 @@ Edge-case: Acquire the maxiumum number of items. Have no items.
 The inventory should display 'nothing' if the player has no items. Otherwise, it should display every item
 the player has, in a list.
 
+
 ### Victory
 
 The player should be able to win, when they reach the final location. They should then be able to replay.
@@ -133,11 +134,13 @@ The player should be able to win, when they reach the final location. They shoul
 
 Go to the 'win' location.
 Press the 'replay' button.
+Play again, and win again.
 
 #### Expected Outcome
 
 The player should see a notification, stating 'they win.'
 They should be prompted to play again, and be able to then restart the game.
+When replaying, the map should remain the same, and they should be able to win again.
 
 
 ---

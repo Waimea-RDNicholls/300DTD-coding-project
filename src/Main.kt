@@ -3,7 +3,7 @@
  * Microsoft Paint Escape
  * Level 3 programming project
  *
- * by Riley ########
+ * by Riley Nicholls
  *
  *
  *
@@ -117,7 +117,7 @@ class Item(val name: String) {
 
     // Function to add item to a location
     fun addItemTo(location: Location) {
-        if (location != null) {
+        if (location.item == null) {
             location.item = this
             located = location
         }
@@ -199,7 +199,7 @@ class GUI : JFrame(), ActionListener {
         val aquarium = Location("Aquarium", "This place has so much water! No wonder there were pipes on the " +
                 "way here. But this also looks surprisingly high-tech... there must be a control room directly nearby!")
         val controlRoom = Location("Control Room", "This place isn't high tech at all! There's just some " +
-                "dinky batteries laying around. Like these would ever be useful.")
+                "scary big red button. I'm not pressing that.")
         val field = Location("Field", "What a nice field. Can see everything in the distance from here. " +
                 "That tower looks important.")
         val tower = Location("Tower", "Hey look, the tower! This must be the way free! The door requires a " +
@@ -219,14 +219,12 @@ class GUI : JFrame(), ActionListener {
         val plane = Location("Plane Wreck", "Amongst the snowy land, a massive skeleton of a plane lies " +
                 "in wait, almost as if it seeks to ensnare passersby. It's just a plane, though. Can't do much.")
         val home = Location("Home..?", "This is home. But why is everything in such low quality? What the " +
-                "hell happened here? What's that tower, far to the north? Maybe I can find directions somewhere to the " +
-                "south-east...")
+                "hell happened here? What's that tower, far to the north-west? The road to get there seems a bit windy...")
         val emptyField = Location("Empty Field", "There is literally nothing here. What? Where did that " +
                 "horrible low quality art go?")
         val sewer = Location("Sewer", "Why would you even want to go here? This place STINKS!")
         val apartments = Location("Apartments", "The people living here were seriously handy... they " +
-                "even had a map, for some reason. Arrows seem to mark the map, with an image of a ruined plane " +
-                "acting as a starting point. The arrows are as follows: ")
+                "even have a bunch of batteries laying around. They might be useful later.")
         val darkTunnel = Location("Dark Tunnel", "Where are the lights!?")
         val bunker = Location("Bunker", "What a nice place. Fancy there being a ladder here. This place " +
                 "is stocked to the brim with all sorts of goods, as well. But upon closer inspection, all of these cans " +
@@ -297,7 +295,7 @@ class GUI : JFrame(), ActionListener {
 
 
         // Lock locations, distribute items to locations
-        batteries.addItemTo(controlRoom)
+        batteries.addItemTo(apartments)
         elevator.unlockedBy(batteries)
 
         keyCard.addItemTo(manorRoom)
@@ -647,8 +645,11 @@ class GUI : JFrame(), ActionListener {
     }
 
     private fun replay() {
+        // Clear map
         locations.removeAll(locations)
+        // Setup new map
         setupGame()
+        // Reset location to home
         currentLocation = locations.first()
         replayButton.isVisible = false
         showLocation()

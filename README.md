@@ -1,4 +1,4 @@
-# PLACEHOLDER
+# MS PAINT ESCAPE
 
 ### Level 3 Programming Project by Riley Nicholls
 
@@ -8,8 +8,8 @@ This project is assessed against [AS91906](https://www.nzqa.govt.nz/nqfdocs/ncea
 
 The project involves the programming of a game.
 
-In this game, you must navigate the map in order to escape without
-running out of energy. You need to find the elevator to the next layer
+In this game, you must navigate the mapm finding useful items that will allow you
+to unlock different locations. You need to find the elevator to the next layer
 of the massive city you find yourself in. But it seems you'll need to find
 a few tools in order to make your way there alive...
 
